@@ -3,15 +3,12 @@ import 'package:nobetci_eczane_api_app/components/my_button.dart';
 import 'package:nobetci_eczane_api_app/components/my_textfield.dart';
 import 'package:nobetci_eczane_api_app/pages/home_page.dart';
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+// ignore: must_be_immutable
+class SearchPage extends StatelessWidget {
+  SearchPage({super.key});
 
-  @override
-  State<SearchPage> createState() => _SearchPageState();
-}
-
-class _SearchPageState extends State<SearchPage> {
   TextEditingController ilController = TextEditingController();
+
   TextEditingController ilceController = TextEditingController();
 
   @override
@@ -19,7 +16,7 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: Colors.grey.shade300,
       appBar: _buildAppbar(),
-      body: _buildBody(),
+      body: _buildBody(context),
     );
   }
 
@@ -35,7 +32,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(25),
@@ -69,12 +66,16 @@ class _SearchPageState extends State<SearchPage> {
                   onTap: () {
                     String il = ilController.text;
                     String ilce = ilceController.text;
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(il: il, ilce: ilce),
-                      ),
-                    );
+                    if (il.isNotEmpty) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(il: il, ilce: ilce),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("İl alanı boş olamaz")));
+                    }
                   },
                   text: "ARA",
                 ),
